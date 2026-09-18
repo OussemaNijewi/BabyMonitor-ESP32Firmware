@@ -28,7 +28,7 @@ float MQ135_AirQ::readData() {
 
     // 3. Calculate Sensor Resistance (Rs)
     // Using a 22k load resistor (RL) on the MQ135 breakout board
-    float RL = 22.0f; 
+    float RL = 10.0f; 
     float Rs = RL * ((3.3f - voltage) / voltage);
 
     // 4. Calculate the Ratio (Rs/R0)
@@ -37,7 +37,7 @@ float MQ135_AirQ::readData() {
     // 5. Calculate Overall Air Quality Score
     // If ratio is 1.0 (clean air), score is 10.
     // If ratio drops to 0.1 (heavy pollution), score shoots up to 100.
-    float estimatedAQI = (1.0f / ratio) * 100.0f; 
+    float estimatedAQI = (1.0f / ratio) * 10.0f; 
 
     return estimatedAQI;
 }

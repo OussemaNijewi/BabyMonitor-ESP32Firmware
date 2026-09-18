@@ -10,7 +10,7 @@ private:
     
     // Baseline resistance of the sensor in clean air (used for calibration)
     // This value needs to be calibrated in a clean environment for accurate AQI
-    float R0 = 10.0f; 
+    float R0 = 134.7f;
 
 public:
     // Constructor takes the GPIO pin number
