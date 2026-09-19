@@ -1,9 +1,11 @@
 #include "HeartRateTask.h"
 
-HeartRateTask::HeartRateTask(QueueHandle_t q, uint8_t sdaPin, uint8_t sclPin)
-    : messageQueue(q), taskHandle(NULL), heartSensor(sdaPin, sclPin) {}
+HeartRateTask::HeartRateTask(uint8_t sdaPin, uint8_t sclPin)
+    : taskHandle(NULL), heartSensor(sdaPin, sclPin) {}
 
-void HeartRateTask::startTask(UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+void HeartRateTask::startTask(QueueHandle_t q, UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+    this->messageQueue = q; // Store the valid initialized queue pointer!
+    
     xTaskCreate(
         taskWrapper,
         taskName,

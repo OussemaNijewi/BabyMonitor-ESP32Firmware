@@ -22,10 +22,13 @@ class DataProcessorTask {
 
     public:
         // Constructor injects the shared queue and the shared global data struct
-        DataProcessorTask(QueueHandle_t q, SharedGlobalData* gData);
+        DataProcessorTask(SharedGlobalData* gData);
 
         // Spawns the FreeRTOS thread
-        void startTask(UBaseType_t priority, const char* taskName = "DataProcessor", configSTACK_DEPTH_TYPE stackSize = 2048);
+        void startTask(QueueHandle_t q, 
+               UBaseType_t priority = 2, 
+               const char* taskName = "AirQualityTask", 
+               configSTACK_DEPTH_TYPE stackSize = 3072);
 };
 
 #endif // DATA_PROCESSOR_TASK_H

@@ -19,9 +19,10 @@ private:
     void run();
 
 public:
-    AirQualityTask(QueueHandle_t q, uint8_t mqPin = 32);
+    AirQualityTask(uint8_t mqPin = 32);
     
-    void startTask(UBaseType_t priority = 2, 
+    void startTask(QueueHandle_t q, 
+                   UBaseType_t priority = 2, 
                    const char* taskName = "AirQualityTask", 
                    configSTACK_DEPTH_TYPE stackSize = 3072);
 };

@@ -1,9 +1,11 @@
 #include "AirQualityTask.h"
 
-AirQualityTask::AirQualityTask(QueueHandle_t q, uint8_t mqPin)
-    : messageQueue(q), taskHandle(NULL), airSensor(mqPin) {}
+AirQualityTask::AirQualityTask(uint8_t mqPin)
+    : taskHandle(NULL), airSensor(mqPin) {}
 
-void AirQualityTask::startTask(UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+void AirQualityTask::startTask(QueueHandle_t q, UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+    this->messageQueue = q;
+    
     xTaskCreate(
         taskWrapper,
         taskName,

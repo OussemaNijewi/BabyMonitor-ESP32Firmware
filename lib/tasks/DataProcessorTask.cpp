@@ -1,9 +1,11 @@
 #include "DataProcessorTask.h"
 
-DataProcessorTask::DataProcessorTask(QueueHandle_t q, SharedGlobalData* gData) 
-    : messageQueue(q), globalData(gData), taskHandle(NULL) {}
+DataProcessorTask::DataProcessorTask(SharedGlobalData* gData) 
+    : globalData(gData), taskHandle(NULL) {}
 
-void DataProcessorTask::startTask(UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+void DataProcessorTask::startTask(QueueHandle_t q, UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+    this->messageQueue = q; // Store the valid initialized queue pointer!
+    
     xTaskCreate(
         taskWrapper,
         taskName,

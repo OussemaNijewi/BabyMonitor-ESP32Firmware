@@ -19,10 +19,11 @@ private:
     void run();
 
 public:
-    HeartRateTask(QueueHandle_t q, uint8_t sdaPin = 21, uint8_t sclPin = 22);
+    HeartRateTask(uint8_t sdaPin = 21, uint8_t sclPin = 22);
     
-    void startTask(UBaseType_t priority = 2, 
-                   const char* taskName = "HeartRateTask", 
+    void startTask(QueueHandle_t q, 
+                   UBaseType_t priority = 2, 
+                   const char* taskName = "AirQualityTask", 
                    configSTACK_DEPTH_TYPE stackSize = 3072);
 };
 
