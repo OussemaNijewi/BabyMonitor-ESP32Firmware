@@ -4,15 +4,16 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include "ISensor.h"
-#include "SharedGlobalData.h"
 
 class MPU6050_Motion : public ISensor {
 private:
     uint8_t i2cAddress;
     float accelScale;
+    float baselineMagnitude;
+
+    float getRawMagnitude();
 
 public:
-    // Kept identical parameters so MotionTask doesn't break
     MPU6050_Motion(uint8_t sda = 21, uint8_t scl = 22);
 
     bool init() override;
