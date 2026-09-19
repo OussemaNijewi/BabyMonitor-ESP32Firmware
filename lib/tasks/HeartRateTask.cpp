@@ -3,8 +3,9 @@
 HeartRateTask::HeartRateTask(uint8_t sdaPin, uint8_t sclPin)
     : taskHandle(NULL), heartSensor(sdaPin, sclPin) {}
 
-void HeartRateTask::startTask(QueueHandle_t q, UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
+void HeartRateTask::startTask(QueueHandle_t q, SemaphoreHandle_t mutex, UBaseType_t priority, const char* taskName, configSTACK_DEPTH_TYPE stackSize) {
     this->messageQueue = q; // Store the valid initialized queue pointer!
+    this->i2cMutex = mutex;
     
     xTaskCreate(
         taskWrapper,
@@ -22,14 +23,23 @@ void HeartRateTask::taskWrapper(void* pvParameters) {
 }
 
 void HeartRateTask::run() {
-    heartSensor.init();
+    // Acquire I2C Mutex for initialization
+    if (i2cMutex != NULL && xSemaphoreTake(i2cMutex, portMAX_DELAY) == pdTRUE) {
+        heartSensor.init();
+        xSemaphoreGive(i2cMutex);
+    }
+
     float lastBPM = -1.0f;
 
     while (1) {
-        if (messageQueue != nullptr) {
-            float currentBPM = heartSensor.readData();
+        if (messageQueue != nullptr && i2cMutex != nullptr) {
+            float currentBPM = 0.0f;
 
-            // Only enqueue if BPM changes or finger detection state changes
+            if (xSemaphoreTake(i2cMutex, pdMS_TO_TICKS(20)) == pdTRUE) {
+                currentBPM = heartSensor.readData();
+                xSemaphoreGive(i2cMutex);
+            }
+
             if (currentBPM != lastBPM) {
                 SensorMessage heartMessage;
                 heartMessage.sensorID = heartSensor.getSensorID();
@@ -43,7 +53,6 @@ void HeartRateTask::run() {
             continue;
         }
 
-        // High-frequency 50Hz polling loop for peak detection
         vTaskDelay(pdMS_TO_TICKS(20));
     }
 }

@@ -5,9 +5,10 @@ MAX30102_Heart::MAX30102_Heart(uint8_t sda, uint8_t scl)
     : sdaPin(sda), sclPin(scl), currentBPM(0.0f), lastBeat(0) {}
 
 bool MAX30102_Heart::init() {
-    Wire.begin(sdaPin, sclPin);
-    
-    if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) {
+    // BUG FIX: Removed Wire.begin(sdaPin, sclPin) to prevent resetting the ESP32 I2C driver
+    // The I2C bus is strictly managed and initialized centrally in main.cpp
+
+    if (!particleSensor.begin(Wire, I2C_SPEED_STANDARD)) {
         return false;
     }
 
@@ -48,5 +49,5 @@ float MAX30102_Heart::readData() {
 }
 
 uint8_t MAX30102_Heart::getSensorID() {
-    return SENSOR_ID_HEART; // Ensure this matches your Sensor ID definitions
+    return SENSOR_ID_HEART; 
 }
