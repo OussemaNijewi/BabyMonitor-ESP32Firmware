@@ -11,7 +11,7 @@ private:
     uint8_t i2cAddress;
 
 public:
-    // Constructor accepting SDA, SCL, and base I2C address (default 0x48)
+    // Constructor accepting SDA, SCL, and base I2C address (default 0x4C)
     MAX30205_BodyTemp(uint8_t sda = 21, uint8_t scl = 22, uint8_t address = 0x4C);
     
     bool init();
