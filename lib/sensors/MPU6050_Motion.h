@@ -4,12 +4,13 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include "ISensor.h"
+#include "SharedGlobalData.h"
 
 class MPU6050_Motion : public ISensor {
 private:
     uint8_t i2cAddress;
     float accelScale;
-    float baselineMagnitude;
+    float baselineOffset;;
 
     float getRawMagnitude();
 
