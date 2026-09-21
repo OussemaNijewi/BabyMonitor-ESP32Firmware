@@ -8,13 +8,14 @@
 #include "AirQualityTask.h"
 #include "HeartRateTask.h"
 #include "MotionTask.h"
+#include "BodyTempTask.h"
 #include "DataProcessorTask.h"
 #include "SharedGlobalData.h"
 #include "WebSocketTask.h"
 
 // in production I would put these variables in an .env
-const char* WIFI_SSID = "WIFI_NETWORK_NAME";
-const char* WIFI_PASSWORD = "WIFI_PASSWORD";
+const char *WIFI_SSID = "WIFI_NETWORK_NAME";
+const char *WIFI_PASSWORD = "WIFI_PASSWORD";
 
 QueueHandle_t sensorQueue;
 SemaphoreHandle_t i2cMutex;
@@ -22,7 +23,8 @@ SharedGlobalData globalData;
 
 AirQualityTask airQualityTask(32);            
 HeartRateTask heartRateTask(21, 22);          
-MotionTask motionTask(21, 22);                
+MotionTask motionTask(21, 22);   
+BodyTempTask bodyTempTask(21, 22);             
 DataProcessorTask consumerTask(&globalData);
 WebsocketTask websocketTask(&globalData, 80); // Pass global state to WebSocket
 
@@ -58,7 +60,8 @@ void setup() {
         heartRateTask.startTask(sensorQueue, i2cMutex, 3, "HeartRateTask", 3072); 
         motionTask.startTask(sensorQueue, i2cMutex, 2, "MotionTask", 3072);       
         airQualityTask.startTask(sensorQueue, 2, "AirQualityTask", 3072);          
-        
+        bodyTempTask.startTask(sensorQueue, i2cMutex, 2, "BodyTempTask", 3072);
+
         Serial.println("[SYSTEM] All tasks running.");
     }
 }
