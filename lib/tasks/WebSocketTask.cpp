@@ -45,6 +45,7 @@ void WebsocketTask::broadcastData() {
         doc["motion"] = snapshot.getMovement(); 
         doc["heartRate"] = snapshot.getHeartRate();
         doc["airQuality"] = snapshot.getAirQuality();
+        doc["bodyTemp"] = snapshot.getBodyTemp();
         // ------------------------------------------------------------------
 
         char buffer[256];

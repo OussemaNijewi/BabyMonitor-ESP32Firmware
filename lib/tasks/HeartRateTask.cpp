@@ -49,7 +49,7 @@ void HeartRateTask::run() {
                 lastBPM = currentBPM;
             }
         } else {
-            vTaskDelay(pdMS_TO_TICKS(1000));
+            vTaskDelay(pdMS_TO_TICKS(100));
             continue;
         }
 
