@@ -26,7 +26,7 @@ void DataProcessorTask::run() {
 
     while (1) {
         if (messageQueue != nullptr && globalData != nullptr) {
-            // Block indefinitely until a message arrives in the queue = consume 0 CPU cycles while waiting
+            // Block thread indefinitely until a message arrives in the queue = consume 0 CPU cycles while waiting
             if (xQueueReceive(messageQueue, &incomingMessage, portMAX_DELAY) == pdTRUE) {
                 // Safely update the global struct using its built-in Mutex
                 globalData->updateValue(incomingMessage.sensorID, incomingMessage.value);

@@ -36,16 +36,16 @@ void setup() {
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
-        Serial.print(".");
+        Serial.print("retry connection...");
     }
     Serial.printf("\n[SUCCESS] WiFi Connected! IP Address: %s\n", WiFi.localIP().toString().c_str());
 
     // 2. I2C Initialization
-    Wire.begin(21, 22);
-    Wire.setClock(100000);
+    Wire.begin(PIN_SDA, PIN_SCL);
+    Wire.setClock(I2C_FREQUENCY);
 
     // 3. Sync Primitives
-    sensorQueue = xQueueCreate(15, sizeof(SensorMessage));
+    sensorQueue = xQueueCreate(SENSOR_QUEUE_LENGTH, sizeof(SensorMessage));
     i2cMutex = xSemaphoreCreateMutex();
 
     if (sensorQueue != NULL && i2cMutex != NULL) {

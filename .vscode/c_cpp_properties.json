@@ -1,3 +1,8 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
 {
     "configurations": [
         {
@@ -798,8 +803,8 @@
                 "ARDUINO_USB_DFU_ON_BOOT=0",
                 ""
             ],
-            "cStandard": "c23",
-            "cppStandard": "c++26",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++20",
             "compilerPath": "C:/Users/Arnaud/.platformio/packages/toolchain-xtensa-esp-elf/bin/xtensa-esp32-elf-gcc.exe",
             "compilerArgs": [
                 "-mlongcalls",
