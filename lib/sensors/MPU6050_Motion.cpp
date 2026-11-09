@@ -1,10 +1,15 @@
 #include "MPU6050_Motion.h"
 
 MPU6050_Motion::MPU6050_Motion(uint8_t sda, uint8_t scl)
-    : i2cAddress(0x68), accelScale(9.81f / 16384.0f), baselineOffset(0.0f) {}
+    : sdaPin(sda), sclPin(scl), i2cAddress(0x68), accelScale(9.81f / 16384.0f), baselineOffset(0.0f) {}
 
 bool MPU6050_Motion::init() {
-    // 1. Wake up the sensor (Write 0x00 to Power Management 1 register 0x6B)
+    // 1. Explicitly initialize the I2C bus using this object's specific pins
+    Wire.begin(sdaPin, sclPin);
+    Wire.setClock(100000); // Set standard 100kHz I2C speed for signal stability
+    delay(20);
+
+    // 2. Wake up the sensor (Write 0x00 to Power Management 1 register 0x6B)
     Wire.beginTransmission(i2cAddress);
     Wire.write(0x6B); // PWR_MGMT_1
     Wire.write(0x00); // 0 = Wake up
@@ -14,13 +19,13 @@ bool MPU6050_Motion::init() {
     
     vTaskDelay(pdMS_TO_TICKS(10)); 
 
-    // 2. Configure Accelerometer to +/- 2G sensitivity
+    // 3. Configure Accelerometer to +/- 2G sensitivity
     Wire.beginTransmission(i2cAddress);
     Wire.write(0x1C); // ACCEL_CONFIG register
     Wire.write(0x00); // 0x00 = +/- 2G
     Wire.endTransmission();
 
-    // 3. Quick Baseline Calibration at startup (Average 20 readings while stationary)
+    // 4. Quick Baseline Calibration at startup (Average 20 readings while stationary)
     vTaskDelay(pdMS_TO_TICKS(50));
     float sum = 0.0f;
     int validSamples = 0;
@@ -47,7 +52,7 @@ bool MPU6050_Motion::init() {
     }
 
     if (validSamples > 0) {
-        baselineOffset = sum / validSamples; // Captures your 10.4-10.5 resting baseline
+        baselineOffset = sum / validSamples; // Captures your resting baseline
     } else {
         baselineOffset = 9.81f; // Fallback default if calibration fails
     }
