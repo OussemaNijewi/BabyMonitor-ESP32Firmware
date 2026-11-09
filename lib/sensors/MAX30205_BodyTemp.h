@@ -9,6 +9,8 @@
 class MAX30205_BodyTemp : public ISensor {
 private:
     uint8_t i2cAddress;
+    uint8_t sdaPin;             
+    uint8_t sclPin;
 
 public:
     // Constructor accepting SDA, SCL, and base I2C address (default 0x4C)

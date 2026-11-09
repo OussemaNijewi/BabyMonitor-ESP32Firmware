@@ -11,8 +11,8 @@
 
 class WebsocketTask {
 private:
-    AsyncWebServer server;
-    AsyncWebSocket ws;
+    AsyncWebServer server; //used for HTTP handshake and upgrade to WebSocket
+    AsyncWebSocket ws; // WebSocket endpoint "/ws"
     TaskHandle_t taskHandle;
     SharedGlobalData* globalData;
 

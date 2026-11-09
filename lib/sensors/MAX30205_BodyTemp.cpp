@@ -1,7 +1,7 @@
 #include "MAX30205_BodyTemp.h"
 
 MAX30205_BodyTemp::MAX30205_BodyTemp(uint8_t sda, uint8_t scl, uint8_t address)
-    : i2cAddress(address) {}
+    : sdaPin(sda), sclPin(scl), i2cAddress(address) {}
 
 bool MAX30205_BodyTemp::init() {
     // 1. Check primary I2C address
